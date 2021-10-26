@@ -10,8 +10,5 @@ namespace Entidad
         public string nombre { get; set; }
         public int edad { get; set; }
         
-        
-        
-        
     }
 }
