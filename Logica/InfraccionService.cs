@@ -11,21 +11,35 @@ namespace Logica
         private readonly Parcial2Context _context;
         public InfraccionService(Parcial2Context context)
         {
-            _context=context;
+            _context = context;
         }
-         public InfraccionResponse Guardar(Infraccion infraccion)
+        public InfraccionResponse Guardar(Infraccion infraccion)
         {
+            var validacion = false;
+            string[] codigos = { "D02", "B01", "C38" };
+            foreach (var item in codigos)
+            {
+                if(infraccion.codigo.Contains(item)){
+                    validacion = true;
+                    break;
+                }
+            }
             try
             {
-                var persona =_context.Personas.Find(infraccion.persona.identificacion);
-                if(persona != null){
-                    infraccion.idPersona = _context.Personas.Find(infraccion.persona.identificacion).identificacion;
-                    infraccion.persona = _context.Personas.Find(infraccion.persona.identificacion);
-                    _context.Infracciones.Add(infraccion);
-                    _context.SaveChanges();
-                    return new InfraccionResponse(infraccion);
+                if (validacion)
+                {
+                    var persona = _context.Personas.Find(infraccion.persona.identificacion);
+                    if (persona != null)
+                    {
+                        infraccion.idPersona = _context.Personas.Find(infraccion.persona.identificacion).identificacion;
+                        infraccion.persona = _context.Personas.Find(infraccion.persona.identificacion);
+                        _context.Infracciones.Add(infraccion);
+                        _context.SaveChanges();
+                        return new InfraccionResponse(infraccion);
+                    }
+                    return new InfraccionResponse("la persona no se encuentra registrada");
                 }
-                return new InfraccionResponse("la persona no se encuentra registrada");
+                return new InfraccionResponse("El codigo no esta registrado");
             }
             catch (Exception e)
             {
@@ -36,10 +50,11 @@ namespace Logica
         {
             try
             {
-                var infraccionBuscada =_context.Infracciones.Find(infraccion.idInfraccion);
-                if(infraccionBuscada != null){
+                var infraccionBuscada = _context.Infracciones.Find(infraccion.idInfraccion);
+                if (infraccionBuscada != null)
+                {
                     infraccionBuscada.codigo = infraccionBuscada.codigo;
-                    infraccionBuscada.descripcion =infraccionBuscada.descripcion;
+                    infraccionBuscada.descripcion = infraccionBuscada.descripcion;
                     infraccionBuscada.valorMulta = infraccionBuscada.valorMulta;
                     infraccionBuscada.persona = _context.Personas.Find(infraccion.idPersona);
                     infraccionBuscada.idPersona = infraccion.idPersona;
@@ -60,7 +75,7 @@ namespace Logica
             List<Infraccion> infracciones = _context.Infracciones.ToList();
             foreach (var infraccion in infracciones)
             {
-                infraccion.persona=_context.Personas.Find(infraccion.idPersona);
+                infraccion.persona = _context.Personas.Find(infraccion.idPersona);
             }
             return infracciones;
         }
@@ -93,7 +108,7 @@ namespace Logica
             return infraccion;
         }
     }
-    public class InfraccionResponse 
+    public class InfraccionResponse
     {
         public InfraccionResponse(Infraccion infraccion)
         {

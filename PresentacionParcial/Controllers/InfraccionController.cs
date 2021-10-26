@@ -42,6 +42,7 @@ namespace PresentacionParcial.Controllers
         Post(InfraccionInputModel infraccionInputModel)
         {
             Infraccion infraccion = MapearInfraccion(infraccionInputModel);
+            
             var response = _infraccionService.Guardar(infraccion);
             if (response.Error)
             {
