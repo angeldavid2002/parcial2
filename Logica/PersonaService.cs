@@ -2,66 +2,70 @@
 using Entidad;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Logica
 {
     public class PersonaService
     {
         private readonly ConnectionManager _conexion;
+        private readonly Parcial2Context _context;
         private readonly PersonaRepository _repositorio;
-        public PersonaService(string connectionString)
+        public PersonaService(Parcial2Context context)
         {
-            _conexion = new ConnectionManager(connectionString);
-            _repositorio = new PersonaRepository(_conexion);
+            _context=context;
         }
         public GuardarPersonaResponse Guardar(Persona persona)
         {
             try
             {
-                _conexion.Open();
-                _repositorio.Guardar(persona);
-                _conexion.Close();
+                var personaBuscada =_context.Personas.Find(persona.identificacion);
+                if(personaBuscada != null){
+                    return new GuardarPersonaResponse("Error la persona ya se encuentra registrada");
+                }
+                _context.Personas.Add(persona);
+                _context.SaveChanges();
                 return new GuardarPersonaResponse(persona);
             }
             catch (Exception e)
             {
                 return new GuardarPersonaResponse($"Error de la Aplicacion: {e.Message}");
             }
-            finally { _conexion.Close(); }
         }
-        public GuardarPersonaResponse Actualizar(Persona persona)
+        public GuardarPersonaResponse Actualizar(Persona personaNueva)
         {
             try
             {
-                _conexion.Open();
-                _repositorio.Actualizar(persona);
-                _conexion.Close();
-                return new GuardarPersonaResponse(persona);
+                var personaBuscada =_context.Personas.Find(personaNueva.identificacion);
+                if(personaBuscada != null){
+                    personaBuscada.nombre = personaNueva.nombre;
+                    personaBuscada.edad =personaNueva.edad;
+                    _context.Personas.Update(personaBuscada);
+                    _context.SaveChanges();
+                    return new GuardarPersonaResponse(personaBuscada);
+                }
+                return new GuardarPersonaResponse("Error la persona no existe");
             }
             catch (Exception e)
             {
                 return new GuardarPersonaResponse($"Error de la Aplicacion: {e.Message}");
             }
-            finally { _conexion.Close(); }
         }
 
         public List<Persona> ConsultarTodos()
         {
-            _conexion.Open();
-            List<Persona> personas = _repositorio.ConsultarTodos();
-            _conexion.Close();
+            List<Persona> personas = _context.Personas.ToList();
             return personas;
         }
         public string Eliminar(int identificacion)
         {
             try
             {
-                _conexion.Open();
-                var persona = _repositorio.BuscarPorIdentificacion(identificacion);
+                var persona = _context.Personas.Find(identificacion);
                 if (persona != null)
                 {
-                    _repositorio.Eliminar(persona);
-                    _conexion.Close();
+                    _context.Personas.Remove(persona);
+                    _context.SaveChanges();
                     return ($"El registro {persona.nombre} se ha eliminado satisfactoriamente.");
                 }
                 else
@@ -74,14 +78,11 @@ namespace Logica
 
                 return $"Error de la Aplicación: {e.Message}";
             }
-            finally { _conexion.Close(); }
 
         }
         public Persona BuscarxIdentificacion(int identificacion)
         {
-            _conexion.Open();
-            Persona persona = _repositorio.BuscarPorIdentificacion(identificacion);
-            _conexion.Close();
+            var persona = _context.Personas.Find(identificacion);
             return persona;
         }
         public int Totalizar()

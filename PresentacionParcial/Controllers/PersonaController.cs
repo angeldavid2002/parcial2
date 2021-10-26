@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Datos;
 using Entidad;
 using Logica;
 using Microsoft.AspNetCore.Mvc;
@@ -18,22 +19,16 @@ namespace PresentacionParcial.Controllers
 
         public IConfiguration Configuration { get; }
 
-        public PersonaController(IConfiguration configuration)
+        public PersonaController(Parcial2Context context)
         {
-            Configuration = configuration;
-            string connectionString =
-                Configuration["ConnectionStrings:DefaultConnection"];
-            _personaService = new PersonaService(connectionString);
+            _personaService = new PersonaService(context);
         }
 
         // GET: api/Persona
         [HttpGet]
         public IEnumerable<PersonaViewModel> Gets()
         {
-            var personas =
-                _personaService
-                    .ConsultarTodos()
-                    .Select(p => new PersonaViewModel(p));
+            var personas =_personaService.ConsultarTodos().Select(p => new PersonaViewModel(p));
             return personas;
         }
 
@@ -71,7 +66,8 @@ namespace PresentacionParcial.Controllers
         private Persona MapearPersona(PersonaInputModel personaInput)
         {
             var persona =
-                new Persona {
+                new Persona
+                {
                     identificacion = personaInput.identificacion,
                     nombre = personaInput.nombre,
                     edad = personaInput.edad
