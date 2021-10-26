@@ -16,6 +16,8 @@ namespace Datos
         }
         public DbSet<Persona> Personas { get; set; }
         public DbSet<Infraccion> Infracciones { get; set; }
+        public DbSet<Liquidacion> Liquidaciones { get; set; }
+        
         
         
     }

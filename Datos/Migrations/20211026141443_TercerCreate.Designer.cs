@@ -4,14 +4,16 @@ using Datos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Datos.Migrations
 {
     [DbContext(typeof(Parcial2Context))]
-    partial class Parcial2ContextModelSnapshot : ModelSnapshot
+    [Migration("20211026141443_TercerCreate")]
+    partial class TercerCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,9 +60,6 @@ namespace Datos.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("ValoraPagar")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("fechaPago")
                         .HasColumnType("datetime2");
 
@@ -69,9 +68,6 @@ namespace Datos.Migrations
 
                     b.Property<int?>("infraccionidInfraccion")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("valorMulta")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("id");
 

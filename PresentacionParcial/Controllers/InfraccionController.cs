@@ -42,7 +42,7 @@ namespace PresentacionParcial.Controllers
         Post(InfraccionInputModel infraccionInputModel)
         {
             Infraccion infraccion = MapearInfraccion(infraccionInputModel);
-            
+
             var response = _infraccionService.Guardar(infraccion);
             if (response.Error)
             {
@@ -66,6 +66,7 @@ namespace PresentacionParcial.Controllers
                 idInfraccion = infraccionInputModel.idInfraccion,
                 codigo = infraccionInputModel.codigo,
                 descripcion = infraccionInputModel.descripcion,
+                fechaInfraccion = infraccionInputModel.fechaInfraccion,
                 valorMulta = infraccionInputModel.valorMulta,
                 persona = new Persona
                 {

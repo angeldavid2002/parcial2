@@ -57,6 +57,7 @@ namespace Logica
                     infraccionBuscada.descripcion = infraccionBuscada.descripcion;
                     infraccionBuscada.valorMulta = infraccionBuscada.valorMulta;
                     infraccionBuscada.persona = _context.Personas.Find(infraccion.idPersona);
+                    infraccionBuscada.fechaInfraccion = infraccionBuscada.fechaInfraccion;
                     infraccionBuscada.idPersona = infraccion.idPersona;
                     _context.Infracciones.Update(infraccionBuscada);
                     _context.SaveChanges();

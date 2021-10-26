@@ -13,6 +13,7 @@ namespace Entidad
         public int idInfraccion { get; set; }
         public string codigo { get; set; }
         public string descripcion { get; set; }
+        public DateTime fechaInfraccion { get; set; }
         public decimal valorMulta { get; set; }
         public int idPersona { get; set; }
         public Persona persona { get; set; }

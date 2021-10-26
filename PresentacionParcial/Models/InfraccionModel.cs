@@ -12,12 +12,10 @@ namespace PresentacionParcial.Models
         public string codigo { get; set; }
         public string descripcion { get; set; }
         public decimal valorMulta { get; set; }
+        public DateTime fechaInfraccion { get; set; }
         public Persona persona { get; set; }
         
-        
-    }
-
-    public class InfraccionViewModel : InfraccionInputModel
+    }    public class InfraccionViewModel : InfraccionInputModel
     {
         public InfraccionViewModel()
         {
@@ -29,6 +27,7 @@ namespace PresentacionParcial.Models
             codigo = infraccion.codigo;
             descripcion = infraccion.descripcion;
             valorMulta = infraccion.valorMulta;
+            fechaInfraccion= infraccion.fechaInfraccion;
             persona = infraccion.persona;
         }
     }
